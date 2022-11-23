@@ -1,8 +1,10 @@
 package main
 
 import (
+	"os"
 	"math"
 	"fmt"
+	"log"
 	"strconv"
 	"net/http"
 	"github.com/gin-gonic/gin"
@@ -107,6 +109,13 @@ func getEmprestimo(c *gin.Context){
 
 func main() {
 	router := gin.Default()
-	router.GET("/emprestimo/valor/:valor/parcelas/:parcelas/taxa/:taxa",getEmprestimo)
-	router.Run(":8080")
+	router.GET("/emprestimo/:valor/:parcelas/:taxa",getEmprestimo)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Não achei variável de ambiente PORT. Usando a porta padrão %s",port)
+	}
+
+	router.Run(":"+port)
 }
