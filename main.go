@@ -66,7 +66,7 @@ func getEmprestimo(c *gin.Context){
 		return
 	}
 
-	resp := fmt.Sprintf("Você pediu %g em %d parcelinhas a %g %% ao mês.",valor,parcelas,taxa)
+	
 	var cronograma = make([]Prestacao, 0,parcelas)
 	
 	var saldo_devedor = valor
@@ -78,6 +78,8 @@ func getEmprestimo(c *gin.Context){
 	}else{
 		prestacao = valor / float64(parcelas)
 	}
+
+	resp := fmt.Sprintf("Você pediu %g em %d parcelinhas a %g %% ao mês. Isso dá uma parcelinha de %g",valor,parcelas,taxa, arredonda(prestacao))
 
 	for i := int64(0); i < parcelas; i++ {
 		amortizacao := prestacao - saldo_devedor*juros
