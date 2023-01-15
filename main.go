@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"os"
 	"math"
 	"fmt"
@@ -109,10 +110,30 @@ func getEmprestimo(c *gin.Context){
 		"taxa" :taxa})
 }	
 
+// Teste de webhook pra registrar pagamentos com o Mercado Pago.
+
+func PostWebhook(c *gin.Context){
+	// isso vai ser visível no log.
+	log.Println("-------------------------")
+	log.Println("Header:")
+	for i, v := range(c.Request.Header){
+		log.Printf("%s %s \n", i, v)
+	}
+	log.Println("Body:")
+	s, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		log.Println("Erro: ",err.Error())
+	}
+	log.Println(string(s))
+
+	log.Println("-------------------------")
+	c.String(http.StatusAccepted, string(s))
+}
+
 func main() {
 	router := gin.Default()
 	router.GET("/emprestimo/:valor/:parcelas/:taxa",getEmprestimo)
-
+	router.POST("/webhook",PostWebhook)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
