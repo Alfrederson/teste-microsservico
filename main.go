@@ -111,7 +111,8 @@ func getEmprestimo(c *gin.Context){
 }	
 
 // Teste de webhook pra registrar pagamentos com o Mercado Pago.
-
+// Simplesmente faz um eco.
+// O MP envia as informações em JSON.
 func PostWebhook(c *gin.Context){
 	// isso vai ser visível no log.
 	log.Println("-------------------------")
@@ -127,7 +128,7 @@ func PostWebhook(c *gin.Context){
 	log.Println(string(s))
 
 	log.Println("-------------------------")
-	c.String(http.StatusAccepted, string(s))
+	c.String(http.StatusOK, string(s))
 }
 
 func main() {
